@@ -89,13 +89,13 @@ runs:
     - name: Setup Node
       uses: actions/setup-node@v3
       with:
-        node-version: 20
+        node-version: 16
         cache: 'npm'
 
     - name: Install Salesforce CLI
       shell: bash
       run: |
-        npm install sfdx-cli --global
+        npm install -g @salesforce/cli@latest
 
     - name: 'Install Code Scanner'
       shell: bash
