@@ -70,20 +70,13 @@ runs:
       uses: actions/checkout@v3
       with:
           fetch-depth: 0
-          ref: ${{ github.event.inputs.ref }}
-
-    - name: Fetch PR head and base
-      shell: bash
-      run: |
-          git fetch origin ${{ github.base_ref }}
-          git fetch origin ${{ github.head_ref }}
 
     - name: Do git diff to limit SFDX Analyzer
       shell: bash
       id: getdiff
       run: |
-          DIFFLIST=$(git diff --name-only --diff-filter=MCRA $(git merge-base --fork-point origin/${{ github.base_ref }} origin/${{ github.head_ref }})..origin/${{ github.head_ref }} ${{ inputs.source_path }} | paste -sd "," -)
-          git diff --diff-filter=MCRA $(git merge-base --fork-point origin/${{ github.base_ref }} origin/${{ github.head_ref }})..origin/${{ github.head_ref }} ${{ inputs.source_path }} > diff.txt
+          DIFFLIST=$(git diff --name-only --diff-filter=MCRA HEAD^1..HEAD ${{ inputs.source_path }} | paste -sd "," -)
+          git diff --diff-filter=MCRA HEAD^1..HEAD ${{ inputs.source_path }} > diff.txt
           echo "$DIFFLIST"
           echo "difflist=$DIFFLIST" >> "$GITHUB_OUTPUT"
     
